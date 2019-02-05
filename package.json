@@ -1,6 +1,6 @@
 {
   "name": "vue-multianalytics",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "description": "A vue multianalytics tool",
   "main": "./dist/vue-multianalytics.min.js",
   "author": "Glovoapp, Adrian Latorre, Francisco Zurita",
@@ -31,7 +31,7 @@
     "vue-loader": "^11.3.4",
     "vue-router": "^2.6.0",
     "vue-template-compiler": "^2.3.4",
-    "webpack": "^1.15.0"
+    "webpack": "^4.29.1"
   },
   "keywords": [
     "mixpanel",
