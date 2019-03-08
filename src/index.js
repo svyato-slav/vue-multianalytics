@@ -5,7 +5,6 @@ import MixpanelModule from "./modules/MixpanelModule";
 import SegmentModule from "./modules/SegmentModule";
 import FacebookModule from "./modules/FacebookModule";
 import MparticleModule from "./modules/MparticleModule";
-import * as Utils from "./utils";
 import * as types from "./analyticsTypes";
 
 const customModules = {};

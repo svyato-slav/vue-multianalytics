@@ -23,7 +23,6 @@ export default class MparticleModule extends BasicModule {
 				);
 		});
 		let config = { isDevelopmentMode: initConf.debug, ...initConf.config };
-		console.log(config);
 		window.mParticle = { config };
 
 		// name of gloval variable changed from analytics to segment
