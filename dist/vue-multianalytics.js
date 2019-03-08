@@ -75,10 +75,6 @@ module.exports =
 
 	var _MparticleModule2 = _interopRequireDefault(_MparticleModule);
 
-	var _utils = __webpack_require__(6);
-
-	var Utils = _interopRequireWildcard(_utils);
-
 	var _analyticsTypes = __webpack_require__(4);
 
 	var types = _interopRequireWildcard(_analyticsTypes);
@@ -87,7 +83,6 @@ module.exports =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	/* eslint-disable */
 	var customModules = {};
 
 	/**
@@ -97,6 +92,7 @@ module.exports =
 	 * @param initConf
 	 */
 
+	/* eslint-disable */
 	var install = function install(Vue) {
 		var initConf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 		var mixin = arguments[2];
@@ -2611,7 +2607,6 @@ module.exports =
 	   * @param {object} attributes - object of attributes related to the event
 	   */
 
-<<<<<<< HEAD
 		}, {
 			key: "ecommerceTrackEvent",
 			value: function ecommerceTrackEvent(_ref3) {
@@ -2652,40 +2647,6 @@ module.exports =
 	   *
 	   * @param {any} properties - traits of your user. If you specify a properties.userId, then a userId will be set
 	   */
-=======
-	  }, {
-	    key: 'identify',
-	    value: function identify(userParams) {
-	      return new Promise(function (resolve, reject) {
-	        var identityRequest = { userIdentities: userParams };
-	        mParticle.Identity.login(identityRequest, function (result) {
-	          if (result.httpCode === 200) resolve(result);else reject(result);
-	        });
-	      });
-	    }
-	  }, {
-	    key: 'reset',
-	    value: function reset() {
-	      return new Promise(function (resolve, reject) {
-	        mParticle.Identity.logout({}, function (result) {
-	          if (result.httpCode === 200) {
-	            resolve(result);
-	          } else reject(result);
-	        });
-	      });
-	    }
-	  }, {
-	    key: 'setUserProperties',
-	    value: function setUserProperties(userParams) {
-	      var currentUser = mParticle.Identity.getCurrentUser();
-	      if (!currentUser) {
-	        return null;
-	      }
-	      for (var key in userParams) {
-	        currentUser.setUserAttribute(key, userParams[key]);
-	      }
-	    }
->>>>>>> 3909e1660f87561a4f010636bcb5079cae92f5f9
 
 		}, {
 			key: "identify",
@@ -2711,12 +2672,13 @@ module.exports =
 		}, {
 			key: "setUserProperties",
 			value: function setUserProperties(userParams) {
-				return new Promise(function (resolve, reject) {
-					var identityRequest = { userIdentities: userParams };
-					mParticle.Identity.modify(identityRequest, function (result) {
-						if (result.httpCode === 200) resolve(result);else reject(result);
-					});
-				});
+				var currentUser = mParticle.Identity.getCurrentUser();
+				if (!currentUser) {
+					return null;
+				}
+				for (var key in userParams) {
+					currentUser.setUserAttribute(key, userParams[key]);
+				}
 			}
 
 			/**
