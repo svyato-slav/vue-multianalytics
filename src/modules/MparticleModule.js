@@ -213,13 +213,13 @@ export default class MparticleModule extends BasicModule {
 	}
 
 	setUserProperties(userParams) {
-		return new Promise((resolve, reject) => {
-			let identityRequest = { userIdentities: userParams };
-			mParticle.Identity.modify(identityRequest, function(result) {
-				if (result.httpCode === 200) resolve(result);
-				else reject(result);
-			});
-		});
+		let currentUser = mParticle.Identity.getCurrentUser();
+		if (!currentUser) {
+			return null;
+		}
+		for (let key in userParams) {
+			currentUser.setUserAttribute(key, userParams[key]);
+		}
 	}
 
 	/**
