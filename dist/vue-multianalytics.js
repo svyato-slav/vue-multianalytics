@@ -45,10 +45,10 @@ module.exports =
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 
 	var _AnalyticsPlugin = __webpack_require__(1);
@@ -87,6 +87,7 @@ module.exports =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/* eslint-disable */
 	var customModules = {};
 
 	/**
@@ -97,71 +98,71 @@ module.exports =
 	 */
 
 	var install = function install(Vue) {
-	  var initConf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-	  var mixin = arguments[2];
+		var initConf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+		var mixin = arguments[2];
 
-	  // init Google Analytics
-	  // We create all the modules that app will use
-	  Vue.modulesEnabled = [];
-	  for (var key in initConf.modules) {
-	    var module = void 0;
-	    switch (key) {
-	      case types.MODULE_GA:
-	        module = new _GAModule2.default();
-	        module.init(initConf.modules[key]);
-	        break;
-	      case types.MODULE_MIXPANEL:
-	        module = new _MixpanelModule2.default();
-	        module.init(initConf.modules[key]);
-	        break;
-	      case types.MODULE_SEGMENT:
-	        module = new _SegmentModule2.default();
-	        module.init(initConf.modules[key]);
-	        break;
-	      case types.MODULE_FACEBOOK:
-	        module = new _FacebookModule2.default();
-	        module.init(initConf.modules[key]);
-	        break;
-	      case types.MODULE_MPARTICLE:
-	        module = new _MparticleModule2.default();
-	        module.init(initConf.modules[key]);
-	      default:
-	        break;
-	    }
-	    if (module) {
-	      Vue.modulesEnabled.push(module);
-	    }
-	  }
+		// init Google Analytics
+		// We create all the modules that app will use
+		Vue.modulesEnabled = [];
+		for (var key in initConf.modules) {
+			var module = void 0;
+			switch (key) {
+				case types.MODULE_GA:
+					module = new _GAModule2.default();
+					module.init(initConf.modules[key]);
+					break;
+				case types.MODULE_MIXPANEL:
+					module = new _MixpanelModule2.default();
+					module.init(initConf.modules[key]);
+					break;
+				case types.MODULE_SEGMENT:
+					module = new _SegmentModule2.default();
+					module.init(initConf.modules[key]);
+					break;
+				case types.MODULE_FACEBOOK:
+					module = new _FacebookModule2.default();
+					module.init(initConf.modules[key]);
+					break;
+				case types.MODULE_MPARTICLE:
+					module = new _MparticleModule2.default();
+					module.init(initConf.modules[key]);
+				default:
+					break;
+			}
+			if (module) {
+				Vue.modulesEnabled.push(module);
+			}
+		}
 
-	  if (Object.keys(customModules).length > 0) {
-	    Object.values(customModules).forEach(function (module, index) {
-	      var moduleInstance = new module();
-	      moduleInstance.init(initConf.modules[Object.keys(customModules)[index]]);
-	      Vue.modulesEnabled.push(moduleInstance);
-	    });
-	  }
-	  // Handle vue-router if defined
-	  if (initConf.routing && initConf.routing.vueRouter) {
-	    initVueRouterGuard(Vue, initConf.routing);
-	  }
+		if (Object.keys(customModules).length > 0) {
+			Object.values(customModules).forEach(function (module, index) {
+				var moduleInstance = new module();
+				moduleInstance.init(initConf.modules[Object.keys(customModules)[index]]);
+				Vue.modulesEnabled.push(moduleInstance);
+			});
+		}
+		// Handle vue-router if defined
+		if (initConf.routing && initConf.routing.vueRouter) {
+			initVueRouterGuard(Vue, initConf.routing);
+		}
 
-	  // Add to vue prototype and also from globals
-	  var analyticsPlugin = new _AnalyticsPlugin2.default(Vue.modulesEnabled);
+		// Add to vue prototype and also from globals
+		var analyticsPlugin = new _AnalyticsPlugin2.default(Vue.modulesEnabled);
 
-	  if (!initConf.returnModule) {
-	    Vue.prototype.$multianalytics = Vue.prototype.$ma = Vue.ma = analyticsPlugin;
+		if (!initConf.returnModule) {
+			Vue.prototype.$multianalytics = Vue.prototype.$ma = Vue.ma = analyticsPlugin;
 
-	    // User can add its own implementation of an interface
-	    if (mixin) {
-	      Vue.prototype.$multianalyticsm = Vue.prototype.$mam = Vue.mam = mixin(analyticsPlugin);
-	    }
-	  } else {
-	    return mixin ? mixin(analyticsPlugin) : analyticsPlugin;
-	  }
+			// User can add its own implementation of an interface
+			if (mixin) {
+				Vue.prototype.$multianalyticsm = Vue.prototype.$mam = Vue.mam = mixin(analyticsPlugin);
+			}
+		} else {
+			return mixin ? mixin(analyticsPlugin) : analyticsPlugin;
+		}
 	};
 
 	var addCustomModule = function addCustomModule(name, module) {
-	  customModules[name] = module;
+		customModules[name] = module;
 	};
 
 	/**
@@ -172,27 +173,27 @@ module.exports =
 	 * @returns {string[]} The ignored routes names formalized.
 	 */
 	var initVueRouterGuard = function initVueRouterGuard(Vue, routing) {
-	  // Flatten routes name
-	  if (routing.ignoredViews) {
-	    routing.ignoredViews = routing.ignoredViews.map(function (view) {
-	      return view.toLowerCase();
-	    });
-	  }
+		// Flatten routes name
+		if (routing.ignoredViews) {
+			routing.ignoredViews = routing.ignoredViews.map(function (view) {
+				return view.toLowerCase();
+			});
+		}
 
-	  if (!routing.preferredProperty) {
-	    routing.preferredProperty = 'path';
-	  }
+		if (!routing.preferredProperty) {
+			routing.preferredProperty = "path";
+		}
 
-	  routing.vueRouter.afterEach(function (to) {
-	    // Ignore some routes
-	    if (routing.ignoredViews && routing.ignoredViews.indexOf(to[routing.preferredProperty].toLowerCase()) !== -1) {
-	      return;
-	    }
-	    // Dispatch vue event using meta analytics value if defined otherwise fallback to route name
-	    Vue.ma.trackView({ viewName: to.meta.analytics || to[routing.preferredProperty] }, routing.ignoredModules);
-	  });
+		routing.vueRouter.afterEach(function (to) {
+			// Ignore some routes
+			if (routing.ignoredViews && routing.ignoredViews.indexOf(to[routing.preferredProperty].toLowerCase()) !== -1) {
+				return;
+			}
+			// Dispatch vue event using meta analytics value if defined otherwise fallback to route name
+			Vue.ma.trackView({ viewName: to.meta.analytics || to[routing.preferredProperty] }, routing.ignoredModules);
+		});
 
-	  return routing.ignoredViews;
+		return routing.ignoredViews;
 	};
 
 	// Export module
@@ -2435,10 +2436,10 @@ module.exports =
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -2464,243 +2465,244 @@ module.exports =
 	var OTHER = 8;
 
 	var MparticleModule = function (_BasicModule) {
-	  _inherits(MparticleModule, _BasicModule);
+		_inherits(MparticleModule, _BasicModule);
 
-	  function MparticleModule() {
-	    _classCallCheck(this, MparticleModule);
+		function MparticleModule() {
+			_classCallCheck(this, MparticleModule);
 
-	    var _this = _possibleConstructorReturn(this, (MparticleModule.__proto__ || Object.getPrototypeOf(MparticleModule)).call(this, _analyticsTypes.MODULE_MPARTICLE));
+			var _this = _possibleConstructorReturn(this, (MparticleModule.__proto__ || Object.getPrototypeOf(MparticleModule)).call(this, _analyticsTypes.MODULE_MPARTICLE));
 
-	    _this.superProperties = {};
-	    _this.config;
-	    return _this;
-	  }
+			_this.superProperties = {};
+			_this.config;
+			return _this;
+		}
 
-	  _createClass(MparticleModule, [{
-	    key: 'init',
-	    value: function init() {
-	      var initConf = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+		_createClass(MparticleModule, [{
+			key: "init",
+			value: function init() {
+				var initConf = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-	      // Apply default configuration
-	      // initConf = { ...pluginConfig, ...initConf }
-	      this.config = initConf;
-	      var mandatoryParams = ["token"];
-	      mandatoryParams.forEach(function (el) {
-	        if (!initConf[el]) throw new Error('VueMultianalytics : Please provide a "' + el + '" from the config.');
-	      });
-	      var config = { isDevelopmentMode: initConf.debug };
-	      window.mParticle = { config: config };
+				// Apply default configuration
+				// initConf = { ...pluginConfig, ...initConf }
+				this.config = initConf;
+				var mandatoryParams = ["token"];
+				mandatoryParams.forEach(function (el) {
+					if (!initConf[el]) throw new Error("VueMultianalytics : Please provide a \"" + el + "\" from the config.");
+				});
+				var config = _extends({ isDevelopmentMode: initConf.debug }, initConf.config);
+				console.log(config);
+				window.mParticle = { config: config };
 
-	      // name of gloval variable changed from analytics to segment
-	      (function (apiKey) {
-	        window.mParticle = window.mParticle || {};
-	        window.mParticle.eCommerce = { Cart: {} };
-	        window.mParticle.Identity = {};
-	        window.mParticle.config = window.mParticle.config || {};
-	        window.mParticle.config.rq = [];
-	        window.mParticle.ready = function (f) {
-	          window.mParticle.config.rq.push(f);
-	        };
+				// name of gloval variable changed from analytics to segment
+				(function (apiKey) {
+					window.mParticle = window.mParticle || {};
+					window.mParticle.eCommerce = { Cart: {} };
+					window.mParticle.Identity = {};
+					window.mParticle.config = window.mParticle.config || {};
+					window.mParticle.config.rq = [];
+					window.mParticle.ready = function (f) {
+						window.mParticle.config.rq.push(f);
+					};
 
-	        function a(o, t) {
-	          return function () {
-	            t && (o = t + "." + o);
-	            var e = Array.prototype.slice.call(arguments);
-	            e.unshift(o), window.mParticle.config.rq.push(e);
-	          };
-	        }
-	        var x = ["endSession", "logError", "logEvent", "logForm", "logLink", "logPageView", "setSessionAttribute", "setAppName", "setAppVersion", "setOptOut", "setPosition", "startNewSession", "startTrackingLocation", "stopTrackingLocation"],
-	            y = ["setCurrencyCode", "logCheckout"],
-	            z = ["login", "logout", "modify"];
-	        x.forEach(function (o) {
-	          window.mParticle[o] = a(o);
-	        }), y.forEach(function (o) {
-	          window.mParticle.eCommerce[o] = a(o, "eCommerce");
-	        }), z.forEach(function (o) {
-	          window.mParticle.Identity[o] = a(o, "Identity");
-	        });
+					function a(o, t) {
+						return function () {
+							t && (o = t + "." + o);
+							var e = Array.prototype.slice.call(arguments);
+							e.unshift(o), window.mParticle.config.rq.push(e);
+						};
+					}
+					var x = ["endSession", "logError", "logEvent", "logForm", "logLink", "logPageView", "setSessionAttribute", "setAppName", "setAppVersion", "setOptOut", "setPosition", "startNewSession", "startTrackingLocation", "stopTrackingLocation"],
+					    y = ["setCurrencyCode", "logCheckout"],
+					    z = ["login", "logout", "modify"];
+					x.forEach(function (o) {
+						window.mParticle[o] = a(o);
+					}), y.forEach(function (o) {
+						window.mParticle.eCommerce[o] = a(o, "eCommerce");
+					}), z.forEach(function (o) {
+						window.mParticle.Identity[o] = a(o, "Identity");
+					});
 
-	        var mp = document.createElement("script");
-	        mp.type = "text/javascript";
-	        mp.async = true;
-	        mp.src = ("https:" == document.location.protocol ? "https://jssdkcdns" : "http://jssdkcdn") + ".mparticle.com/js/v2/" + apiKey + "/mparticle.js";
-	        var s = document.getElementsByTagName("script")[0];
-	        s.parentNode.insertBefore(mp, s);
-	      })(initConf.token);
-	    }
+					var mp = document.createElement("script");
+					mp.type = "text/javascript";
+					mp.async = true;
+					mp.src = ("https:" == document.location.protocol ? "https://jssdkcdns" : "http://jssdkcdn") + ".mparticle.com/js/v2/" + apiKey + "/mparticle.js";
+					var s = document.getElementsByTagName("script")[0];
+					s.parentNode.insertBefore(mp, s);
+				})(initConf.token);
+			}
 
-	    /**
-	     * https://segment.com/docs/sources/website/analytics.js/#page
-	     * Dispatch a page event
-	     *
-	     * params object should contain
-	     * @param {string} viewName
-	     */
+			/**
+	   * https://segment.com/docs/sources/website/analytics.js/#page
+	   * Dispatch a page event
+	   *
+	   * params object should contain
+	   * @param {string} viewName
+	   */
 
-	  }, {
-	    key: 'trackView',
-	    value: function trackView(_ref) {
-	      var viewName = _ref.viewName,
-	          _ref$properties = _ref.properties,
-	          properties = _ref$properties === undefined ? {} : _ref$properties,
-	          _ref$customFlags = _ref.customFlags,
-	          customFlags = _ref$customFlags === undefined ? {} : _ref$customFlags;
+		}, {
+			key: "trackView",
+			value: function trackView(_ref) {
+				var viewName = _ref.viewName,
+				    _ref$properties = _ref.properties,
+				    properties = _ref$properties === undefined ? {} : _ref$properties,
+				    _ref$customFlags = _ref.customFlags,
+				    customFlags = _ref$customFlags === undefined ? {} : _ref$customFlags;
 
-	      if (!mParticle.logPageView) return;
-	      try {
-	        var fullProperties = _extends(properties, this.superProperties);
-	        mParticle.logPageView(viewName, fullProperties, customFlags);
-	      } catch (e) {
-	        if (!(e instanceof ReferenceError)) {
-	          throw e;
-	        }
-	      }
-	    }
-	    /**
-	     * Dispatch a tracking analytics event
-	     * https://segment.com/docs/sources/website/analytics.js/#track
-	     *
-	     * params object should contain
-	     * @param {string} category - Typically the object that was interacted with (e.g. 'Video')
-	     * @param {string} action - The type of interaction (e.g. 'play')
-	     * @param {integer} eventType - Type of event for mParticle
-	     * @param {string} label - Useful for categorizing events (e.g. 'Fall Campaign')
-	     * @param {integer} value - A numeric value associated with the event (e.g. 42)
-	     */
+				if (!mParticle.logPageView) return;
+				try {
+					var fullProperties = _extends(properties, this.superProperties);
+					mParticle.logPageView(viewName, fullProperties, customFlags);
+				} catch (e) {
+					if (!(e instanceof ReferenceError)) {
+						throw e;
+					}
+				}
+			}
+			/**
+	   * Dispatch a tracking analytics event
+	   * https://segment.com/docs/sources/website/analytics.js/#track
+	   *
+	   * params object should contain
+	   * @param {string} category - Typically the object that was interacted with (e.g. 'Video')
+	   * @param {string} action - The type of interaction (e.g. 'play')
+	   * @param {integer} eventType - Type of event for mParticle
+	   * @param {string} label - Useful for categorizing events (e.g. 'Fall Campaign')
+	   * @param {integer} value - A numeric value associated with the event (e.g. 42)
+	   */
 
-	  }, {
-	    key: 'trackEvent',
-	    value: function trackEvent(_ref2) {
-	      var _ref2$category = _ref2.category,
-	          category = _ref2$category === undefined ? "Event" : _ref2$category,
-	          action = _ref2.action,
-	          _ref2$eventType = _ref2.eventType,
-	          eventType = _ref2$eventType === undefined ? OTHER : _ref2$eventType,
-	          _ref2$label = _ref2.label,
-	          label = _ref2$label === undefined ? null : _ref2$label,
-	          _ref2$value = _ref2.value,
-	          value = _ref2$value === undefined ? null : _ref2$value,
-	          _ref2$properties = _ref2.properties,
-	          properties = _ref2$properties === undefined ? {} : _ref2$properties,
-	          _ref2$callback = _ref2.callback,
-	          callback = _ref2$callback === undefined ? null : _ref2$callback;
+		}, {
+			key: "trackEvent",
+			value: function trackEvent(_ref2) {
+				var _ref2$category = _ref2.category,
+				    category = _ref2$category === undefined ? "Event" : _ref2$category,
+				    action = _ref2.action,
+				    _ref2$eventType = _ref2.eventType,
+				    eventType = _ref2$eventType === undefined ? OTHER : _ref2$eventType,
+				    _ref2$label = _ref2.label,
+				    label = _ref2$label === undefined ? null : _ref2$label,
+				    _ref2$value = _ref2.value,
+				    value = _ref2$value === undefined ? null : _ref2$value,
+				    _ref2$properties = _ref2.properties,
+				    properties = _ref2$properties === undefined ? {} : _ref2$properties,
+				    _ref2$callback = _ref2.callback,
+				    callback = _ref2$callback === undefined ? null : _ref2$callback;
 
-	      if (!mParticle.logEvent) return;
-	      try {
-	        if (this.config.debug) {
-	          _utils.logDebug.apply(undefined, arguments);
-	        }
-	        var fullProperties = _extends(properties, this.superProperties);
-	        mParticle.logEvent(action, eventType, fullProperties);
-	      } catch (e) {
-	        if (!(e instanceof ReferenceError)) {
-	          throw e;
-	        }
-	      }
-	    }
+				if (!mParticle.logEvent) return;
+				try {
+					if (this.config.debug) {
+						_utils.logDebug.apply(undefined, arguments);
+					}
+					var fullProperties = _extends(properties, this.superProperties);
+					mParticle.logEvent(action, eventType, fullProperties);
+				} catch (e) {
+					if (!(e instanceof ReferenceError)) {
+						throw e;
+					}
+				}
+			}
 
-	    /**
-	     * Dispatch a tracking analytics event
-	     * https://segment.com/docs/sources/website/analytics.js/#track
-	     *
-	     * params object should contain
-	     * @param {integer} productActionType - Type of action to ecommerce platform (e.g. 1)
-	     * @param {object} product - Product to be tracked
-	     * @param {object} attributes - object of attributes related to the event
-	     */
+			/**
+	   * Dispatch a tracking analytics event
+	   * https://segment.com/docs/sources/website/analytics.js/#track
+	   *
+	   * params object should contain
+	   * @param {integer} productActionType - Type of action to ecommerce platform (e.g. 1)
+	   * @param {object} product - Product to be tracked
+	   * @param {object} attributes - object of attributes related to the event
+	   */
 
-	  }, {
-	    key: 'ecommerceTrackEvent',
-	    value: function ecommerceTrackEvent(_ref3) {
-	      var _ref3$productActionTy = _ref3.productActionType,
-	          productActionType = _ref3$productActionTy === undefined ? mParticle.CommerceEventType.ProductAddToCart : _ref3$productActionTy,
-	          _ref3$product = _ref3.product,
-	          product = _ref3$product === undefined ? [] : _ref3$product,
-	          _ref3$properties = _ref3.properties,
-	          properties = _ref3$properties === undefined ? {} : _ref3$properties,
-	          _ref3$currency = _ref3.currency,
-	          currency = _ref3$currency === undefined ? undefined : _ref3$currency;
+		}, {
+			key: "ecommerceTrackEvent",
+			value: function ecommerceTrackEvent(_ref3) {
+				var _ref3$productActionTy = _ref3.productActionType,
+				    productActionType = _ref3$productActionTy === undefined ? mParticle.CommerceEventType.ProductAddToCart : _ref3$productActionTy,
+				    _ref3$product = _ref3.product,
+				    product = _ref3$product === undefined ? [] : _ref3$product,
+				    _ref3$properties = _ref3.properties,
+				    properties = _ref3$properties === undefined ? {} : _ref3$properties,
+				    _ref3$currency = _ref3.currency,
+				    currency = _ref3$currency === undefined ? undefined : _ref3$currency;
 
-	      if (!mParticle.eCommerce || !mParticle.eCommerce.createProduct) return;
-	      try {
-	        if (this.config.debug) {
-	          _utils.logDebug.apply(undefined, arguments);
-	        }
-	        var mProduct = {};
-	        if (!Array.isArray(product)) {
-	          mProduct = mParticle.eCommerce.createProduct(product.name, product.sku || performance.now(), product.price, product.quantity);
-	        }
+				if (!mParticle.eCommerce || !mParticle.eCommerce.createProduct) return;
+				try {
+					if (this.config.debug) {
+						_utils.logDebug.apply(undefined, arguments);
+					}
+					var mProduct = {};
+					if (!Array.isArray(product)) {
+						mProduct = mParticle.eCommerce.createProduct(product.name, product.sku || performance.now(), product.price, product.quantity);
+					}
 
-	        var fullProperties = _extends(properties, this.superProperties);
-	        if (currency) {
-	          mParticle.eCommerce.setCurrencyCode(currency);
-	        }
-	        mParticle.eCommerce.logProductAction(productActionType, mProduct, fullProperties);
-	      } catch (e) {
-	        if (!(e instanceof ReferenceError)) {
-	          throw e;
-	        }
-	      }
-	    }
+					var fullProperties = _extends(properties, this.superProperties);
+					if (currency) {
+						mParticle.eCommerce.setCurrencyCode(currency);
+					}
+					mParticle.eCommerce.logProductAction(productActionType, mProduct, fullProperties);
+				} catch (e) {
+					if (!(e instanceof ReferenceError)) {
+						throw e;
+					}
+				}
+			}
 
-	    /**
-	     * associate your users and their actions to a recognizable userId
-	     * https://segment.com/docs/sources/website/analytics.js/#identify
-	     *
-	     * @param {any} properties - traits of your user. If you specify a properties.userId, then a userId will be set
-	     */
+			/**
+	   * associate your users and their actions to a recognizable userId
+	   * https://segment.com/docs/sources/website/analytics.js/#identify
+	   *
+	   * @param {any} properties - traits of your user. If you specify a properties.userId, then a userId will be set
+	   */
 
-	  }, {
-	    key: 'identify',
-	    value: function identify(userParams) {
-	      return new Promise(function (resolve, reject) {
-	        var identityRequest = { userIdentities: userParams };
-	        mParticle.Identity.login(identityRequest, function (result) {
-	          if (result.httpCode === 200) resolve(result);else reject(result);
-	        });
-	      });
-	    }
-	  }, {
-	    key: 'reset',
-	    value: function reset() {
-	      return new Promise(function (resolve, reject) {
-	        mParticle.Identity.logout({}, function (result) {
-	          if (result.httpCode === 200) {
-	            resolve(result);
-	          } else reject(result);
-	        });
-	      });
-	    }
-	  }, {
-	    key: 'setUserProperties',
-	    value: function setUserProperties(userParams) {
-	      return new Promise(function (resolve, reject) {
-	        var identityRequest = { userIdentities: userParams };
-	        mParticle.Identity.modify(identityRequest, function (result) {
-	          if (result.httpCode === 200) resolve(result);else reject(result);
-	        });
-	      });
-	    }
+		}, {
+			key: "identify",
+			value: function identify(userParams) {
+				return new Promise(function (resolve, reject) {
+					var identityRequest = { userIdentities: userParams };
+					mParticle.Identity.login(identityRequest, function (result) {
+						if (result.httpCode === 200) resolve(result);else reject(result);
+					});
+				});
+			}
+		}, {
+			key: "reset",
+			value: function reset() {
+				return new Promise(function (resolve, reject) {
+					mParticle.Identity.logout({}, function (result) {
+						if (result.httpCode === 200) {
+							resolve(result);
+						} else reject(result);
+					});
+				});
+			}
+		}, {
+			key: "setUserProperties",
+			value: function setUserProperties(userParams) {
+				return new Promise(function (resolve, reject) {
+					var identityRequest = { userIdentities: userParams };
+					mParticle.Identity.modify(identityRequest, function (result) {
+						if (result.httpCode === 200) resolve(result);else reject(result);
+					});
+				});
+			}
 
-	    /**
-	     * Define a property that will be sent across all the events
-	     *
-	     * @param {any} properties
-	     */
+			/**
+	   * Define a property that will be sent across all the events
+	   *
+	   * @param {any} properties
+	   */
 
-	  }, {
-	    key: 'setSuperProperties',
-	    value: function setSuperProperties() {
-	      var properties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+		}, {
+			key: "setSuperProperties",
+			value: function setSuperProperties() {
+				var properties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-	      if (properties.isAuthorized !== undefined) {
-	        properties.isAuthorized = properties.isAuthorized ? "true" : "false";
-	      }
-	      this.superProperties = properties;
-	    }
-	  }]);
+				if (properties.isAuthorized !== undefined) {
+					properties.isAuthorized = properties.isAuthorized ? "true" : "false";
+				}
+				this.superProperties = properties;
+			}
+		}]);
 
-	  return MparticleModule;
+		return MparticleModule;
 	}(_BasicModule3.default);
 
 	exports.default = MparticleModule;
