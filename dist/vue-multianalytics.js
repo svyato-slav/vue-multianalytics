@@ -2486,7 +2486,6 @@ module.exports =
 					if (!initConf[el]) throw new Error("VueMultianalytics : Please provide a \"" + el + "\" from the config.");
 				});
 				var config = _extends({ isDevelopmentMode: initConf.debug }, initConf.config);
-				console.log(config);
 				window.mParticle = { config: config };
 
 				// name of gloval variable changed from analytics to segment
