@@ -46,6 +46,10 @@ export default class GAModule extends BasicModule {
       ga('set', 'appName', initConf.appName)
       ga('set', 'appVersion', initConf.appVersion)
 
+      if (this.settings.userId) {
+        ga('set', 'userId', this.settings.userId)
+      }
+
       // ecommerce
       if (initConf['ecommerce']) {
         ga('require', 'ecommerce')
@@ -71,10 +75,6 @@ export default class GAModule extends BasicModule {
     let fieldsObject = {
       hitType: 'pageview',
       page: viewName
-    }
-
-    if (this.settings.userId) {
-      ga('set', '&uid', this.settings.userId)
     }
 
     // ga('set', 'screenName', params.viewName)
@@ -159,6 +159,7 @@ export default class GAModule extends BasicModule {
 
 
   setUsername (userId) {
+    ga('set', 'userId', userId);
     this.settings.userId = userId
   }
 
