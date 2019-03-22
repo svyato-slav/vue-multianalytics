@@ -44,6 +44,10 @@ let gaConfig = {
   appVersion: '0.1', // Mandatory
   trackingId: 'YOUR_UA', // Mandatory
   debug: true, // Whether or not display console logs debugs (optional)
+  options: {
+    'clientId': '35009a79-1a05-49d7-b876-2b884d0f825b',
+    'siteSpeedSampleRate': 10
+  }
 }
 
 let mixpanelConfig = {
@@ -443,6 +447,7 @@ appName: 'Test', // Mandatory
 appVersion: '0.1', // Mandatory
 trackingId: 'YOUR_UA', // Mandatory
 ecommerce: true, // Enables ecommerce support (optional)
+config: {} // Initial GA config. Defaults to 'auto'
 debug: true // Whether or not display console logs debugs (optional)
 ```
 Supported Events: `trackView`, `trackEvent`, `trackException`, `addTransaction`, `addItem`, `trackTransaction`, `clearTransactions`, `setUsername`, `trackTiming`

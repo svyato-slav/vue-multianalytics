@@ -39,7 +39,8 @@ export default class GAModule extends BasicModule {
       this.config.debug = initConf.debug
 
       // register tracker
-      ga('create', initConf.trackingId, 'auto')
+      let customConfig = initConf.config || 'auto'
+      ga('create', initConf.trackingId, customConfig)
       ga("set", "transport", "beacon")
 
       // set app name and version
