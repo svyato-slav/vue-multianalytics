@@ -3,6 +3,20 @@ import BasicModule from "./BasicModule";
 import { logDebug } from "../utils";
 
 const OTHER = 8;
+// https://github.com/mParticle/mparticle-sdk-javascript/blob/394a0663a02274fe7b148393f644f188a86f38a5/src/types.js#L88
+const supportedIdentityTypes = [
+	'other',
+	'customerId',
+	'facebook',
+	'twitter',
+	'google',
+	'microsoft',
+	'yahoo',
+	'email',
+	'facebookCustomAudienceId',
+	'other2',
+	'other3',
+	'other4']
 
 export default class MparticleModule extends BasicModule {
 	constructor() {
@@ -193,7 +207,13 @@ export default class MparticleModule extends BasicModule {
 
 	identify(userParams) {
 		return new Promise((resolve, reject) => {
-			let identityRequest = { userIdentities: userParams };
+			let strippedParams = { ...userParams }
+			let notSupportedKeys = Object.keys(strippedParams).findAll(key => !supportedIdentityTypes.includes(key))
+			notSupportedKeys.forEach(key => {
+				delete strippedParams[key]
+			})
+
+			let identityRequest = { userIdentities: strippedParams };
 			mParticle.Identity.login(identityRequest, result => {
 				if (result.httpCode === 200) resolve(result);
 				else reject(result);
