@@ -31,31 +31,28 @@ export default class GAModule extends BasicModule {
 
       // Apply default configuration
       // initConf = { ...pluginConfig, ...initConf }
-      const mandatoryParams = [ 'trackingId', 'appName', 'appVersion' ];
+      const mandatoryParams = [ 'trackingIds', 'appName', 'appVersion' ];
       mandatoryParams.forEach(el => {
         if (!initConf[ el ]) throw new Error(`VueAnalytics : Please provide a "${el}" from the config.`)
       })
 
       this.config.debug = initConf.debug
+      this.config.trackingIds = initConf.trackingIds
+      for (let i=0; i<initConf.trackingIds.length; i++) {
+        let trackingId = initConf.trackingIds[i]
+        // register tracker
+        ga('create', trackingId, 'auto', `tracker${trackingId}`)
+        ga(`tracker${trackingId}.set`, "transport", "beacon")
 
-      // register tracker
-      let customConfig = initConf.config || 'auto'
-      ga('create', initConf.trackingId, customConfig)
-      ga("set", "transport", "beacon")
+        // set app name and version
+        ga(`tracker${trackingId}.set`, 'appName', initConf.appName)
+        ga(`tracker${trackingId}.set`, 'appVersion', initConf.appVersion)
 
-      // set app name and version
-      ga('set', 'appName', initConf.appName)
-      ga('set', 'appVersion', initConf.appVersion)
-
-      if (this.settings.userId) {
-        ga('set', 'userId', this.settings.userId)
+        // ecommerce
+        if (initConf['ecommerce']) {
+          ga(`tracker${trackingId}.require`, 'ecommerce')
+        }
       }
-
-      // ecommerce
-      if (initConf['ecommerce']) {
-        ga('require', 'ecommerce')
-      }
-
   }
 
 
@@ -78,8 +75,16 @@ export default class GAModule extends BasicModule {
       page: viewName
     }
 
-    // ga('set', 'screenName', params.viewName)
-    ga('send', fieldsObject)
+    for (let i=0; i<this.config.trackingIds.length; i++) {
+      let trackingId = this.config.trackingIds[i]
+
+      if (this.settings.userId) {
+        ga(`tracker${trackingId}.set`, '&uid', this.settings.userId)
+      }
+
+      // ga('set', 'screenName', params.viewName)
+      ga(`tracker${trackingId}.send`, fieldsObject)
+    }
   }
 
   /**
@@ -115,7 +120,12 @@ export default class GAModule extends BasicModule {
       userId: this.settings.userId
     }
 
-    ga('send', fieldsObject)
+    for (let i=0; i<this.config.trackingIds.length; i++) {
+      let trackingId = this.config.trackingIds[i]
+
+      ga(`tracker${trackingId}.send`, fieldsObject)
+    }
+
   }
 
   /**
@@ -129,7 +139,11 @@ export default class GAModule extends BasicModule {
     if (this.config.debug) {
       logDebug({description, isFatal})
     }
-    ga('send', 'exception', { 'exDescription': description, 'exFatal': isFatal });
+    for (let i=0; i<this.config.trackingIds.length; i++) {
+      let trackingId = this.config.trackingIds[i]
+
+      ga(`tracker${trackingId}.send`, 'exception', { 'exDescription': description, 'exFatal': isFatal })
+    }
   }
 
   /**
@@ -154,13 +168,15 @@ export default class GAModule extends BasicModule {
     if (timingLabel) {
       conf.timingLabel = timingLabel;
     }
+    for (let i=0; i<this.config.trackingIds.length; i++) {
+      let trackingId = this.config.trackingIds[i]
 
-    ga('send', conf);
+      ga(`tracker${trackingId}.send`, conf)
+    }
   }
 
 
   setUsername (userId) {
-    ga('set', 'userId', userId);
     this.settings.userId = userId
   }
 
@@ -185,14 +201,17 @@ export default class GAModule extends BasicModule {
   * @param {string} currency - Currency - https://developers.google.com/analytics/devguides/platform/features/currencies
   */
   addTransaction ({id, affiliation = '', revenue = 0, shipping = 0, tax = 0, currency = 'USD'}) {
-    ga('ecommerce:addTransaction', {
-      id,
-      affiliation,
-      revenue,
-      shipping,
-      tax,
-      currency
-    })
+    for (let i=0; i<this.config.trackingIds.length; i++) {
+      let trackingId = this.config.trackingIds[i]
+      ga(`tracker${trackingId}.ecommerce:addTransaction`, {
+        id,
+        affiliation,
+        revenue,
+        shipping,
+        tax,
+        currency
+      })
+    }
   }
 
   /**
@@ -207,14 +226,17 @@ export default class GAModule extends BasicModule {
   * @param {int} quantity - Quantity
   */
   addItem ({id, name, sku, category, price = 0, quantity = 1}) {
-    ga('ecommerce:addItem', {
-      id,
-      name,
-      sku,
-      category,
-      price,
-      quantity
-    })
+    for (let i=0; i<this.config.trackingIds.length; i++) {
+      let trackingId = this.config.trackingIds[i]
+      ga(`tracker${trackingId}.ecommerce:addItem`, {
+        id,
+        name,
+        sku,
+        category,
+        price,
+        quantity
+      })
+    }
   }
 
   /**
@@ -222,7 +244,10 @@ export default class GAModule extends BasicModule {
   * More info at https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce
   */
   trackTransaction () {
-    ga('ecommerce:send')
+    for (let i=0; i<this.config.trackingIds.length; i++) {
+      let trackingId = this.config.trackingIds[i]
+      ga(`tracker${trackingId}.ecommerce:send`)
+    }
   }
 
   /**
@@ -230,7 +255,10 @@ export default class GAModule extends BasicModule {
   * More info at https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce
   */
   clearTransactions () {
-    ga('ecommerce:clear')
+    for (let i=0; i<this.config.trackingIds.length; i++) {
+      let trackingId = this.config.trackingIds[i]
+      ga(`tracker${trackingId}.ecommerce:clear`)
+    }
   }
 
 }

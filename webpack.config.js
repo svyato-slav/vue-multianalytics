@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -7,23 +8,29 @@ module.exports = {
     'vue-multianalytics.min': './src/index.js'
   },
   output: {
-    path: "./dist",
+    path: __dirname + "/dist",
     filename: "[name].js",
     libraryTarget: 'commonjs2'
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      include: /\.min\.js$/,
-      compress: {
-        warnings: false
-      }
-    }),
-  ],
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        uglifyOptions: {
+          compress: false,
+          ecma: 6,
+          mangle: true
+        },
+        sourceMap: true
+      }),
+    ],
+  },
   resolve: {
-    extensions: [ '', '.js', '.json' ]
+    extensions: [ '*', '.js', '.json' ]
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         loader: 'babel-loader',
