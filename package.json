@@ -1,6 +1,6 @@
 {
-  "name": "vue-multianalytics",
-  "version": "1.11.2",
+  "name": "vue-multianalytics-ga",
+  "version": "1.11.3",
   "description": "A vue multianalytics tool",
   "main": "./dist/vue-multianalytics.min.js",
   "author": "Glovoapp, Adrian Latorre, Francisco Zurita",
@@ -32,7 +32,8 @@
     "vue-router": "^2.6.0",
     "vue-template-compiler": "^2.3.4",
     "webpack": "^4.29.1",
-    "webpack-cli": "^3.3.0"
+    "webpack-cli": "^3.3.0",
+    "uglifyjs-webpack-plugin": "^2.1.2"
   },
   "keywords": [
     "mixpanel",
@@ -49,8 +50,5 @@
     "Vue2",
     "vue",
     "google"
-  ],
-  "dependencies": {
-    "uglifyjs-webpack-plugin": "^2.1.2"
-  }
+  ]
 }
